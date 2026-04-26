@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Macaron Addict Paris — Carte des Parfums</title>
+
+<!-- SEO & Open Graph (partage WhatsApp, Instagram, etc.) -->
+<meta name="description" content="Découvrez les 12 parfums d'exception de Macaron Addict Paris. Chocolat Grand Cru, Pistache de Bronte, Vanille de Madagascar et bien plus.">
+<meta property="og:title" content="Macaron Addict — Carte des Parfums">
+<meta property="og:description" content="12 parfums · Terroirs d'exception · Paris">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://terroirs.macaronaddict.com">
+<meta property="og:image" content="https://terroirs.macaronaddict.com/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- iOS PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MXA Terroirs">
+<meta name="theme-color" content="#0F0C08">
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="/manifest.json">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --cream: #FAF6F0;
+    --dark: #0F0C08;
+    --muted: #8B7355;
+    --orange: #E8640A;
+    --overlay-bg: rgba(10,8,5,0.95);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  html, body {
+    background: var(--dark);
+    color: var(--cream);
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ──────────────────────────────
+     SPLASH
+  ────────────────────────────── */
+  #splash {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--dark);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 28px;
+    transition: opacity 0.7s ease, visibility 0.7s;
+  }
+  #splash.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+
+  .splash-logo {
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 48px;
+  }
+  .logo-word {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 5px; text-transform: uppercase;
+    color: var(--cream);
+  }
+  .logo-heart { color: var(--orange); font-size: 12px; }
+  .logo-paris {
+    font-size: 8px; letter-spacing: 3px; color: var(--muted);
+    text-transform: uppercase; margin-left: 2px;
+    border-left: 1px solid rgba(201,168,76,0.25); padding-left: 10px;
+  }
+
+  .splash-eyebrow {
+    font-size: 8px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 14px; text-align: center;
+  }
+  .splash-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(46px, 12vw, 68px);
+    font-weight: 300; line-height: 1.0;
+    text-align: center; color: var(--cream);
+    margin-bottom: 10px;
+  }
+  .splash-title em { font-style: italic; color: var(--gold); }
+  .splash-sub {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); text-align: center; margin-bottom: 52px;
+  }
+
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    width: 100%; max-width: 260px; margin-bottom: 40px;
+  }
+  .div-line { flex:1; height:1px; background:rgba(201,168,76,0.2); }
+  .div-diamond { color:var(--gold); font-size:7px; }
+
+  .splash-cta { display:flex; flex-direction:column; align-items:center; gap:12px; width:100%; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #C9A84C 0%, #E8C97A 50%, #C9A84C 100%);
+    color: var(--dark); border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 600; letter-spacing: 3.5px;
+    text-transform: uppercase; padding: 18px 40px;
+    cursor: pointer; width: 100%; max-width: 300px;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:active { opacity: 0.82; }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--muted); border: 1px solid rgba(201,168,76,0.25);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 400; letter-spacing: 2.5px;
+    text-transform: uppercase; padding: 15px 32px;
+    cursor: pointer; width: 100%; max-width: 300px;
+    transition: all 0.2s;
+  }
+  .btn-secondary:active { color:var(--gold); border-color:rgba(201,168,76,0.6); }
+
+  .splash-tagline {
+    position: absolute; bottom: max(32px, env(safe-area-inset-bottom));
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; font-style: italic;
+    color: rgba(201,168,76,0.3); text-align: center; padding: 0 24px;
+  }
+
+  /* ──────────────────────────────
+     CAMERA VIEW
+  ────────────────────────────── */
+  #camera-view {
+    position: fixed; inset: 0; z-index: 10;
+    display: none; flex-direction: column;
+  }
+  #camera-view.active { display: flex; }
+
+  #video-bg {
+    position: absolute; inset: 0; width:100%; height:100%;
+    object-fit: cover; z-index: 0; filter: brightness(0.82);
+  }
+
+  .cam-ui { position:relative; z-index:2; flex:1; display:flex; flex-direction:column; }
+
+  .cam-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: max(52px, env(safe-area-inset-top) + 16px) 24px 16px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.78), transparent);
+  }
+  .cam-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase;
+  }
+  .cam-brand .h { color: var(--orange); }
+
+  .btn-icon {
+    width:40px; height:40px;
+    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18);
+    color:white; font-size:17px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .scan-zone {
+    flex:1; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:20px; padding:20px;
+  }
+
+  .scan-frame { width:200px; height:200px; position:relative; }
+  .scan-frame::before,.scan-frame::after,.sf-br,.sf-bl {
+    content:''; position:absolute; width:24px; height:24px;
+  }
+  .scan-frame::before { top:0;left:0; border-top:2px solid var(--gold); border-left:2px solid var(--gold); }
+  .scan-frame::after  { top:0;right:0; border-top:2px solid var(--gold); border-right:2px solid var(--gold); }
+  .sf-br { bottom:0;right:0; border-bottom:2px solid var(--gold); border-right:2px solid var(--gold); }
+  .sf-bl { bottom:0;left:0; border-bottom:2px solid var(--gold); border-left:2px solid var(--gold); }
+  .scan-line {
+    position:absolute; left:8px; right:8px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold-light),transparent);
+    animation:scanAnim 2.6s ease-in-out infinite; top:0;
+  }
+  @keyframes scanAnim {
+    0%   { top:8px;   opacity:0; }
+    8%   { opacity:1; }
+    92%  { opacity:1; }
+    100% { top:192px; opacity:0; }
+  }
+
+  .scan-hint {
+    font-size:10px; letter-spacing:2px; text-transform:uppercase;
+    color:rgba(255,255,255,0.65); text-align:center;
+    text-shadow:0 1px 10px rgba(0,0,0,0.9);
+  }
+
+  .ar-pulse {
+    position:absolute; inset:0; z-index:5;
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:none; opacity:0; transition:opacity 0.3s;
+  }
+  .ar-pulse.show { opacity:1; }
+  .ar-ring  { width:130px;height:130px;border-radius:50%;border:2px solid var(--gold);animation:ringOut 1s ease-out forwards; }
+  .ar-ring2 { position:absolute;width:90px;height:90px;border-radius:50%;border:1px solid rgba(201,168,76,0.45);animation:ringOut 1s ease-out 0.15s forwards; }
+  @keyframes ringOut { 0%{transform:scale(0.4);opacity:1} 100%{transform:scale(2.2);opacity:0} }
+
+  .cam-pills {
+    padding:16px 20px max(44px,env(safe-area-inset-bottom) + 16px);
+    background:linear-gradient(to top,rgba(0,0,0,0.88),transparent);
+  }
+  .pills-lbl { font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px; }
+  .pills-row { display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none; }
+  .pills-row::-webkit-scrollbar { display:none; }
+  .pill {
+    flex-shrink:0; padding:7px 14px;
+    background:rgba(255,255,255,0.07); border:1px solid rgba(201,168,76,0.2);
+    font-size:9px;letter-spacing:1px;color:var(--cream);
+    cursor:pointer;white-space:nowrap;
+    font-family:'Montserrat',sans-serif;
+  }
+  .pill:active { background:rgba(201,168,76,0.18);border-color:var(--gold);color:var(--gold-light); }
+
+  /* ──────────────────────────────
+     BROWSE VIEW
+  ────────────────────────────── */
+  #browse-view { display:none; min-height:100vh; }
+  #browse-view.active { display:block; }
+
+  .browse-header {
+    padding: max(52px,env(safe-area-inset-top)+12px) 24px 28px;
+    background:linear-gradient(180deg,#1c1508 0%,var(--dark) 100%);
+    position:relative;
+  }
+  .browse-header::after {
+    content:'';position:absolute;bottom:0;left:24px;right:24px;
+    height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.4),transparent);
+  }
+  .browse-nav { display:flex;align-items:center;justify-content:space-between;margin-bottom:24px; }
+  .btn-back {
+    background:none;border:none;color:var(--muted);
+    font-family:'Montserrat',sans-serif;
+    font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;
+  }
+  .btn-scan-sm {
+    font-family:'Montserrat',sans-serif;
+    font-size:9px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--gold);background:none;
+    border:1px solid rgba(201,168,76,0.25);padding:8px 14px;cursor:pointer;
+  }
+  .browse-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(34px,9vw,48px);font-weight:300;
+    color:var(--cream);line-height:1.0;margin-bottom:4px;
+  }
+  .browse-title em { font-style:italic;color:var(--gold); }
+  .browse-tag { font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--muted);margin-top:4px; }
+
+  /* Grid */
+  .terroir-grid {
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:1px;background:rgba(201,168,76,0.08);
+    padding-bottom:max(80px,env(safe-area-inset-bottom)+64px);
+  }
+  .t-card {
+    background:var(--dark);cursor:pointer;
+    position:relative;overflow:hidden;
+    aspect-ratio:3/4;
+    display:flex;flex-direction:column;justify-content:flex-end;
+    padding:14px;
+  }
+  .t-card:active { opacity:0.88; }
+  .t-card-bg { position:absolute;inset:0;transition:transform 0.5s ease; }
+  .t-card:active .t-card-bg { transform:scale(1.04); }
+  .t-card-overlay {
+    position:absolute;inset:0;
+    background:linear-gradient(to top,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.0) 55%,transparent 100%);
+  }
+  .t-macaron {
+    position:absolute;top:16px;left:50%;transform:translateX(-50%);
+    width:68px;height:68px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:32px;
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 4px 20px rgba(0,0,0,0.5);
+  }
+  .t-badge {
+    position:absolute;top:10px;right:10px;z-index:2;
+    font-size:7px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--gold);border:1px solid rgba(201,168,76,0.35);
+    padding:3px 7px;background:rgba(0,0,0,0.65);
+  }
+  .t-content { position:relative;z-index:2; }
+  .t-num { font-size:8px;letter-spacing:2px;color:var(--gold);margin-bottom:3px; }
+  .t-name {
+    font-family:'Cormorant Garamond',serif;
+    font-size:17px;font-weight:400;color:var(--cream);line-height:1.15;margin-bottom:3px;
+  }
+  .t-desc {
+    font-family:'Cormorant Garamond',serif;
+    font-size:11px;color:rgba(255,255,255,0.42);line-height:1.3;font-style:italic;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+
+  /* ──────────────────────────────
+     DETAIL OVERLAY
+  ────────────────────────────── */
+  #detail-overlay {
+    position:fixed;inset:0;z-index:50;
+    background:var(--overlay-bg);
+    display:none;flex-direction:column;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+    opacity:0;transform:translateY(24px);
+    transition:transform 0.45s cubic-bezier(0.16,1,0.3,1),opacity 0.45s ease;
+  }
+  #detail-overlay.active { display:flex; }
+  #detail-overlay.visible { opacity:1;transform:translateY(0); }
+
+  .d-hero {
+    position:relative;padding:72px 24px 32px;
+    flex-shrink:0;overflow:hidden;min-height:270px;
+    display:flex;flex-direction:column;justify-content:flex-end;
+  }
+  .d-hero-bg {
+    position:absolute;inset:0;z-index:0;
+    transition:transform 8s ease;
+  }
+  #detail-overlay.visible .d-hero-bg { transform:scale(1.07); }
+  .d-hero-overlay {
+    position:absolute;inset:0;z-index:1;
+    background:linear-gradient(160deg,rgba(0,0,0,0.25) 0%,rgba(0,0,0,0) 38%,rgba(10,8,5,0.98) 82%);
+  }
+  .d-close {
+    position:absolute;top:max(48px,env(safe-area-inset-top)+12px);right:20px;z-index:10;
+    width:38px;height:38px;background:rgba(0,0,0,0.55);
+    border:1px solid rgba(201,168,76,0.25);
+    color:var(--cream);font-size:16px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .d-macaron-big {
+    position:absolute;top:max(48px,env(safe-area-inset-top)+12px);left:50%;transform:translateX(-50%);z-index:2;
+    width:96px;height:96px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:48px;
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 8px 40px rgba(0,0,0,0.55);
+  }
+  .d-hero-content { position:relative;z-index:2; }
+  .d-num { font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:6px; }
+  .d-name {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(30px,8vw,46px);font-weight:300;
+    color:var(--cream);line-height:1.0;margin-bottom:8px;
+  }
+  .d-accroche {
+    font-family:'Cormorant Garamond',serif;
+    font-size:14px;font-style:italic;color:rgba(250,246,240,0.58);line-height:1.5;
+  }
+
+  .d-body { padding:28px 24px max(100px,env(safe-area-inset-bottom)+80px); }
+
+  .d-sect { margin-bottom:28px; }
+  .d-lbl {
+    font-size:8px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:10px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .d-lbl::after { content:'';flex:1;height:1px;background:rgba(201,168,76,0.15); }
+  .d-text {
+    font-family:'Cormorant Garamond',serif;
+    font-size:17px;line-height:1.7;color:rgba(250,246,240,0.82);font-weight:300;
+  }
+
+  .orig-row { display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px; }
+  .orig-chip {
+    padding:6px 13px;
+    background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.18);
+    font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(250,246,240,0.65);
+  }
+  .orig-chip b { color:var(--gold);margin-right:5px;font-weight:500; }
+
+  .notes-row { display:flex;gap:8px; }
+  .note-box {
+    flex:1;background:rgba(201,168,76,0.05);
+    border:1px solid rgba(201,168,76,0.12);padding:12px 8px;text-align:center;
+  }
+  .note-e { font-size:22px;display:block;margin-bottom:4px; }
+  .note-l { font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:2px; }
+  .note-v { font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--cream); }
+
+  .acc-row { display:flex;flex-wrap:wrap;gap:8px; }
+  .acc-tag {
+    padding:6px 12px;border:1px solid rgba(201,168,76,0.2);
+    font-size:9px;letter-spacing:1px;color:rgba(250,246,240,0.68);
+    font-family:'Montserrat',sans-serif;
+  }
+
+  .d-cta { display:flex;flex-direction:column;gap:10px;margin-top:32px; }
+
+  /* ──────────────────────────────
+     BOTTOM TAB
+  ────────────────────────────── */
+  .bottom-tab {
+    position:fixed;bottom:0;left:0;right:0;z-index:20;
+    background:rgba(12,9,5,0.97);backdrop-filter:blur(20px);
+    border-top:1px solid rgba(201,168,76,0.12);
+    display:none;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .bottom-tab.show { display:flex; }
+  .tab-item {
+    flex:1;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:11px 8px;cursor:pointer;
+    font-size:7px;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--muted);gap:4px;transition:color 0.2s;
+  }
+  .tab-item.active { color:var(--gold); }
+  .tab-icon { font-size:17px; }
+
+  /* ──────────────────────────────
+     CAMERA DENIED FALLBACK
+  ────────────────────────────── */
+  #cam-denied {
+    position:fixed;inset:0;z-index:200;
+    background:var(--dark);
+    display:none;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:40px 28px;text-align:center;
+  }
+  #cam-denied.show { display:flex; }
+  .denied-icon { font-size:48px;margin-bottom:20px; }
+  .denied-title { font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--cream);margin-bottom:10px; }
+  .denied-text { font-size:12px;line-height:1.7;color:var(--muted);margin-bottom:32px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ SPLASH ═══ -->
+<div id="splash">
+  <div class="splash-logo">
+    <span class="logo-word">Macaron</span>
+    <span class="logo-heart">♥</span>
+    <span class="logo-word">Addict</span>
+    <span class="logo-paris">Paris</span>
+  </div>
+
+  <p class="splash-eyebrow">Carte interactive des parfums</p>
+  <h1 class="splash-title">Un voyage<br><em>sensoriel</em></h1>
+  <p class="splash-sub">12 parfums · Terroirs d'exception</p>
+
+  <div class="divider">
+    <div class="div-line"></div>
+    <div class="div-diamond">◆</div>
+    <div class="div-line"></div>
+  </div>
+
+  <div class="splash-cta">
+    <button class="btn-primary" ontouchstart="" onclick="openCamera()">◎ &nbsp;Scanner la carte</button>
+    <button class="btn-secondary" ontouchstart="" onclick="openBrowse()">Parcourir les parfums</button>
+  </div>
+
+  <p class="splash-tagline">Qui sème l'amour récolte des macarons ♥</p>
+</div>
+
+<!-- ═══ CAMERA DENIED ═══ -->
+<div id="cam-denied">
+  <div class="denied-icon">📷</div>
+  <div class="denied-title">Accès caméra refusé</div>
+  <p class="denied-text">Pour scanner la carte, autorisez l'accès à la caméra dans les réglages de votre navigateur, puis rechargez la page.</p>
+  <button class="btn-primary" ontouchstart="" onclick="document.getElementById('cam-denied').classList.remove('show'); openBrowse()">
+    Parcourir sans scanner
+  </button>
+</div>
+
+<!-- ═══ CAMERA VIEW ═══ -->
+<div id="camera-view">
+  <video id="video-bg" autoplay playsinline muted></video>
+  <div class="cam-ui">
+    <div class="cam-header">
+      <div class="cam-brand">MXA <span class="h">♥</span></div>
+      <button class="btn-icon" ontouchstart="" onclick="closeCamera()">✕</button>
+    </div>
+    <div class="scan-zone">
+      <div class="scan-frame">
+        <div class="scan-line"></div>
+        <div class="sf-br"></div>
+        <div class="sf-bl"></div>
+        <div class="ar-pulse" id="ar-pulse">
+          <div class="ar-ring"></div>
+          <div class="ar-ring2"></div>
+        </div>
+      </div>
+      <p class="scan-hint">Pointez vers un macaron sur la carte</p>
+    </div>
+    <div class="cam-pills">
+      <p class="pills-lbl">Accès direct</p>
+      <div class="pills-row" id="pills-row"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BROWSE VIEW ═══ -->
+<div id="browse-view">
+  <div class="browse-header">
+    <div class="browse-nav">
+      <button class="btn-back" ontouchstart="" onclick="goHome()">← Accueil</button>
+      <button class="btn-scan-sm" ontouchstart="" onclick="openCamera()">◎ Scanner</button>
+    </div>
+    <h2 class="browse-title">Nos <em>Parfums</em></h2>
+    <p class="browse-tag">12 créations · Terroirs d'exception</p>
+  </div>
+  <div class="terroir-grid" id="terroir-grid"></div>
+  <div class="bottom-tab show">
+    <div class="tab-item active"><span class="tab-icon">◉</span>Explorer</div>
+    <div class="tab-item" ontouchstart="" onclick="openCamera()"><span class="tab-icon">◎</span>Scanner</div>
+    <div class="tab-item"><span class="tab-icon">♥</span>Favoris</div>
+  </div>
+</div>
+
+<!-- ═══ DETAIL OVERLAY ═══ -->
+<div id="detail-overlay">
+  <div class="d-hero">
+    <div class="d-hero-bg" id="d-bg"></div>
+    <div class="d-hero-overlay"></div>
+    <button class="d-close" ontouchstart="" onclick="closeDetail()">✕</button>
+    <div class="d-macaron-big" id="d-mac"></div>
+    <div class="d-hero-content">
+      <div class="d-num" id="d-num"></div>
+      <div class="d-name" id="d-name"></div>
+      <div class="d-accroche" id="d-acc"></div>
+    </div>
+  </div>
+  <div class="d-body" id="d-body"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA — 12 PARFUMS MACARON ADDICT
+// ══════════════════════════════════════════
+const P = [
+  {
+    id:1, name:"Chocolat 2020", emoji:"🍫", badge:"Grand Cru",
+    color:"linear-gradient(160deg,#3d1a08 0%,#1e0c04 100%)",
+    accroche:"Grand Cru Valrhona Caraïbe 66% — notre meilleur allié de l'année 2020 qui reste notre meilleur ami en 2024.",
+    origine:[{l:"Fournisseur",v:"Valrhona"},{l:"Origine",v:"Caraïbes"},{l:"Cacao",v:"66%"}],
+    histoire:"Né d'une rencontre avec le Valrhona Caraïbe 66%, ce macaron incarne l'excellence chocolatière à la française. Le Caraïbe développe des arômes intenses de fruits rouges et de notes épicées, sublimés par la délicatesse de notre ganache montée. Élu meilleur parfum de notre collection en 2020, il n'a jamais quitté la carte depuis.",
+    notes:[{e:"☕",l:"Tête",v:"Torréfié"},{e:"🫐",l:"Cœur",v:"Fruits rouges"},{e:"🌶",l:"Fond",v:"Épicé"}],
+    accords:["Whisky tourbé","Porto Tawny","Café éthiopien"]
+  },
+  {
+    id:2, name:"Totalement Nuts", emoji:"🌰", badge:"IGP Bio",
+    color:"linear-gradient(160deg,#6b4c20 0%,#3a2610 100%)",
+    accroche:"Ganache au praliné Noisette du Piémont IGP bio. Authentique et sans complexe, elle fera danser vos papilles.",
+    origine:[{l:"Origine",v:"Piémont, Italie"},{l:"Label",v:"IGP Bio"},{l:"Variété",v:"Tonda Gentile"}],
+    histoire:"La noisette Tonda Gentile des Langhe, dans le Piémont, est l'une des plus réputées au monde. Torréfiée à la commande, elle livre des arômes d'une puissance et d'une rondeur incomparables. Notre praliné artisanal, réalisé à chaud dans une mélangère en cuivre, capture toute sa générosité naturelle.",
+    notes:[{e:"🔥",l:"Tête",v:"Torréfié"},{e:"🌰",l:"Cœur",v:"Noisette"},{e:"🍯",l:"Fond",v:"Caramélisé"}],
+    accords:["Café ristretto","Frangelico","Amaretto"]
+  },
+  {
+    id:3, name:"Caramel Cœur Salé", emoji:"🧂", badge:"A.O.P.",
+    color:"linear-gradient(160deg,#c8820a 0%,#7a4a04 100%)",
+    accroche:"Un caramel au cœur tendre associé à un beurre doux d'Isigny A.O.P. qui fera tomber vos derniers remparts.",
+    origine:[{l:"Beurre",v:"Isigny A.O.P."},{l:"Sel",v:"Fleur de sel"},{l:"Origine",v:"Normandie"}],
+    histoire:"Le beurre d'Isigny-sur-Mer, au cœur du bocage normand, bénéficie d'une Appellation d'Origine Protégée depuis 1986. Fabriqué à partir du lait des vaches de la région baignée par la Manche, il affiche une teneur en matière grasse et un goût crémeux sans équivalent. Notre caramel lui doit tout son caractère.",
+    notes:[{e:"🔥",l:"Tête",v:"Caramélisé"},{e:"🧈",l:"Cœur",v:"Lacté"},{e:"🌊",l:"Fond",v:"Iodé"}],
+    accords:["Calvados","Cidre breton","Bourbon américain"]
+  },
+  {
+    id:4, name:"Un Café S'il Vous Plaît", emoji:"☕", badge:"Équitable",
+    color:"linear-gradient(160deg,#2c1a0a 0%,#120802 100%)",
+    accroche:"L'intensité d'un des meilleurs cafés du monde ! Le café équitable Sirochi d'Éthiopie.",
+    origine:[{l:"Café",v:"Sirochi"},{l:"Origine",v:"Éthiopie"},{l:"Label",v:"Équitable"}],
+    histoire:"L'Éthiopie est le berceau du café arabica. Le Sirochi, cultivé en altitude dans les forêts du Sidama, développe des notes d'agrumes, de fruits noirs et de jasmin d'une complexité remarquable. En travaillant avec des coopératives certifiées équitables, nous garantissons une rémunération juste aux producteurs éthiopiens.",
+    notes:[{e:"🌸",l:"Tête",v:"Floral"},{e:"☕",l:"Cœur",v:"Arabica"},{e:"🍋",l:"Fond",v:"Agrumes"}],
+    accords:["Whisky irlandais","Crème de cacao","Cognac VSOP"]
+  },
+  {
+    id:5, name:"Vanilla Sky", emoji:"🌿", badge:"Grand Cru",
+    color:"linear-gradient(160deg,#8a7040 0%,#4a3a1a 100%)",
+    accroche:"Vanille grand cru de Madagascar elle est issue d'un terroir exceptionnel et vous attendrira par sa générosité.",
+    origine:[{l:"Origine",v:"Madagascar"},{l:"Type",v:"Planifolia Grand Cru"},{l:"Traitement",v:"Artisanal"}],
+    histoire:"La vanille Bourbon de Madagascar représente 80% de la production mondiale, mais rares sont les pods qui atteignent le niveau Grand Cru. Nos gousses, sélectionnées dans la région SAVA au nord-est de l'île, présentent une teneur en vanilline exceptionnelle, développant des arômes crémeux, boisés et légèrement fumés.",
+    notes:[{e:"🌿",l:"Tête",v:"Végétal"},{e:"🍦",l:"Cœur",v:"Crémeux"},{e:"🪵",l:"Fond",v:"Boisé"}],
+    accords:["Rhum vieux agricole","Sauternes","Thé vanille"]
+  },
+  {
+    id:6, name:"Touche Pas Ma Pistache", emoji:"🟢", badge:"A.O.P. Bio",
+    color:"linear-gradient(160deg,#4a7828 0%,#243c14 100%)",
+    accroche:"Miss Monde de la Pistache, elle est AOP Bio et cultivée en Sicile à Bronte au pied de l'Etna.",
+    origine:[{l:"Origine",v:"Bronte, Sicile"},{l:"Label",v:"D.O.P. Bio"},{l:"Altitude",v:"700–900 m"}],
+    histoire:"La pistache de Bronte, surnommée « l'or vert de Sicile », pousse sur les flancs fertiles de l'Etna entre 700 et 900 mètres d'altitude. La lave refroidie enrichit le sol en minéraux, conférant à ce fruit à coque une complexité aromatique inégalée. La récolte, manuelle et bisannuelle, en fait l'un des produits les plus rares de la gastronomie italienne.",
+    notes:[{e:"🌿",l:"Tête",v:"Herbacé"},{e:"🟢",l:"Cœur",v:"Pistache pure"},{e:"🍦",l:"Fond",v:"Crémeux doux"}],
+    accords:["Prosecco","Limoncello","Café ristretto"]
+  },
+  {
+    id:7, name:"Cassis In Wonderland", emoji:"🫐", badge:"Bio",
+    color:"linear-gradient(160deg,#4a1060 0%,#220830 100%)",
+    accroche:"La douceur de la violette et l'intensité du cassis. Attention explosssiiiioooonnnnn bio !",
+    origine:[{l:"Cassis",v:"Bio IGP"},{l:"Violette",v:"Toulouse"},{l:"Sucre",v:"Non raffiné"}],
+    histoire:"Le cassis de Bourgogne, roi des baies noires, rencontre ici la violette de Toulouse dans une alliance aussi surprenante qu'évidente. Le cassis apporte sa puissance tannique et fruitée, la violette enveloppe d'un voile floral suave. L'ensemble révèle en bouche une complexité florale-fruitée qui évolue longuement.",
+    notes:[{e:"💜",l:"Tête",v:"Violette"},{e:"🫐",l:"Cœur",v:"Cassis"},{e:"🍇",l:"Fond",v:"Tannique"}],
+    accords:["Crème de cassis","Kir Royal","Gin floral"]
+  },
+  {
+    id:8, name:"Framboisier des Musclés", emoji:"🍓", badge:"IGP Bio",
+    color:"linear-gradient(160deg,#c0283a 0%,#6a0e1e 100%)",
+    accroche:"Des framboises bios fraîches et une jolie couleur acidulée, le bonheur en toute simplicité.",
+    origine:[{l:"Framboise",v:"IGP Bio"},{l:"Origine",v:"Drôme, France"},{l:"Récolte",v:"Manuelle"}],
+    histoire:"La framboise bio de la Drôme, cueillie à pleine maturité en plein été, est l'une des plus parfumées de France. Sans aucun additif, notre ganache exprime la framboise dans toute sa vérité : acidulée en attaque, ronde en milieu de bouche, longue et fruitée en finale. La simplicité à son sommet.",
+    notes:[{e:"🌸",l:"Tête",v:"Floral"},{e:"🍓",l:"Cœur",v:"Framboise"},{e:"🍋",l:"Fond",v:"Acidulé"}],
+    accords:["Champagne rosé","Coteaux du Layon","Thé hibiscus"]
+  },
+  {
+    id:9, name:"Aussi Givré Qu'un Citron", emoji:"🍋", badge:"IGP Bio",
+    color:"linear-gradient(160deg,#c8c020 0%,#7a7408 100%)",
+    accroche:"Des citrons de Menton IGP Bio. Une saveur acidulée de tarte au citron qui nous fait fondre comme neige au soleil.",
+    origine:[{l:"Citron",v:"Menton IGP Bio"},{l:"Région",v:"Côte d'Azur"},{l:"Zeste",v:"Pressé à froid"}],
+    histoire:"Le citron de Menton, cultivé en terrasses sur les versants escarpés des Alpes-Maritimes, bénéficie d'une IGP depuis 1994. Moins acide et plus aromatique que les citrons ordinaires, il développe des notes florales et sucrées uniques. Notre crème citron, réalisée sans cuisson excessive, préserve toute la fraîcheur du zeste pressé à froid.",
+    notes:[{e:"🍋",l:"Tête",v:"Zesté"},{e:"🌸",l:"Cœur",v:"Floral"},{e:"🍰",l:"Fond",v:"Tarte"}],
+    accords:["Limoncello","Chablis","Gin tonic citrus"]
+  },
+  {
+    id:10, name:"Passion Mi Amor", emoji:"🌞", badge:"Exotique",
+    color:"linear-gradient(160deg,#e0800a 0%,#903800 100%)",
+    accroche:"Un macaron saveur passion, fruité et intense. Le seul moyen de se délivrer de la tentation, c'est d'y céder, merci Oscar !",
+    origine:[{l:"Fruit",v:"Maracuja"},{l:"Origine",v:"Amazonie, Brésil"},{l:"Inspiration",v:"Oscar Wilde"}],
+    histoire:"La Passiflora edulis pousse dans les forêts amazoniennes et sur les côtes brésiliennes. Son fruit, le maracuja, développe des arômes d'une intensité tropicale incomparable. Acide, sucré, floral et exotique à la fois, il nous rappelle que céder à la tentation est parfois la seule voie raisonnable.",
+    notes:[{e:"🌺",l:"Tête",v:"Tropical"},{e:"🌞",l:"Cœur",v:"Passion"},{e:"🍋",l:"Fond",v:"Acidulé vif"}],
+    accords:["Caipirinha","Champagne demi-sec","Rhum blanc"]
+  },
+  {
+    id:11, name:"Orange Is Ze Niou Black", emoji:"🍊", badge:"Maroc",
+    color:"linear-gradient(160deg,#d06010 0%,#7a2c00 100%)",
+    accroche:"Ganache montée chocolat blanc au goût subtil d'eau de fleur d'oranger du Maroc. Mmmmmmmmm !",
+    origine:[{l:"Fleur d'oranger",v:"Distillée"},{l:"Origine",v:"Maroc"},{l:"Chocolat",v:"Blanc grand cru"}],
+    histoire:"L'eau de fleur d'oranger du Maroc, distillée à partir des fleurs du bigaradier en pleine floraison printanière, est un ingrédient essentiel de la pâtisserie orientale depuis des siècles. Notre ganache montée associe sa douceur florale et légèrement épicée à la rondeur d'un chocolat blanc de qualité supérieure.",
+    notes:[{e:"🌺",l:"Tête",v:"Floral"},{e:"🍊",l:"Cœur",v:"Orange"},{e:"🍦",l:"Fond",v:"Vanillé"}],
+    accords:["Thé à la menthe","Gewurztraminer","Champagne blanc de blancs"]
+  },
+  {
+    id:12, name:"La Manda Lorian", emoji:"🟠", badge:"Bio Sicile",
+    color:"linear-gradient(160deg,#d47020 0%,#7a3800 100%)",
+    accroche:"Mandarine Bio de Sicile réputée pour son caractère affirmé, elle saura sans aucun doute vous séduire.",
+    origine:[{l:"Mandarine",v:"Bio"},{l:"Origine",v:"Sicile, Italie"},{l:"Variété",v:"Tardivo di Ciaculli"}],
+    histoire:"La mandarine Tardivo di Ciaculli, cultivée dans la plaine de Palerme depuis le XVIIIe siècle, est l'une des variétés les plus aromatiques qui soit. Récoltée en plein hiver, elle développe une peau fine et huileuse gorgée d'arômes. Notre macaron en capture toute l'insolence méditerranéenne : solaire, affirmée, inoubliable.",
+    notes:[{e:"🍊",l:"Tête",v:"Zesté"},{e:"🌺",l:"Cœur",v:"Floral"},{e:"🍬",l:"Fond",v:"Sucré doux"}],
+    accords:["Prosecco","Sambuca","Thé bergamote"]
+  }
+];
+
+// ══════════════════════════════════════════
+// STATE & INIT
+// ══════════════════════════════════════════
+let stream = null, scanT = null;
+
+function init() {
+  // Pills caméra
+  const pills = document.getElementById('pills-row');
+  P.forEach(p => {
+    const b = document.createElement('button');
+    b.className = 'pill';
+    b.textContent = p.emoji + ' ' + p.name;
+    b.ontouchstart = () => {};
+    b.onclick = () => openDetail(p.id);
+    pills.appendChild(b);
+  });
+  buildGrid();
+}
+
+function buildGrid() {
+  const g = document.getElementById('terroir-grid');
+  g.innerHTML = '';
+  P.forEach(p => {
+    const c = document.createElement('div');
+    c.className = 't-card';
+    c.innerHTML = `
+      <div class="t-card-bg" style="background:${p.color}"></div>
+      <div class="t-card-overlay"></div>
+      <div class="t-macaron" style="background:${p.color}">${p.emoji}</div>
+      <div class="t-badge">${p.badge}</div>
+      <div class="t-content">
+        <div class="t-num">N°\u00a0${String(p.id).padStart(2,'0')}</div>
+        <div class="t-name">${p.name}</div>
+        <div class="t-desc">${p.accroche}</div>
+      </div>`;
+    c.ontouchstart = () => {};
+    c.onclick = () => openDetail(p.id);
+    g.appendChild(c);
+  });
+}
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function goHome() {
+  closeCamera();
+  document.getElementById('browse-view').classList.remove('active');
+  document.getElementById('splash').classList.remove('hidden');
+}
+function openBrowse() {
+  document.getElementById('splash').classList.add('hidden');
+  document.getElementById('browse-view').classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// CAMERA
+// ══════════════════════════════════════════
+async function openCamera() {
+  document.getElementById('splash').classList.add('hidden');
+  document.getElementById('camera-view').classList.add('active');
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 } }
+    });
+    document.getElementById('video-bg').srcObject = stream;
+    simulateScan();
+  } catch(e) {
+    closeCamera();
+    document.getElementById('cam-denied').classList.add('show');
+  }
+}
+function closeCamera() {
+  document.getElementById('camera-view').classList.remove('active');
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+  if (scanT) { clearTimeout(scanT); scanT = null; }
+}
+function simulateScan() {
+  // Demo: détecte un parfum aléatoire après ~4s
+  // En production: remplacer par MindAR.js pour détection réelle
+  scanT = setTimeout(() => {
+    const pulse = document.getElementById('ar-pulse');
+    pulse.classList.add('show');
+    setTimeout(() => {
+      pulse.classList.remove('show');
+      openDetail(P[Math.floor(Math.random() * P.length)].id);
+    }, 950);
+  }, 4000);
+}
+
+// ══════════════════════════════════════════
+// DETAIL
+// ══════════════════════════════════════════
+function openDetail(id) {
+  const p = P.find(x => x.id === id);
+  if (!p) return;
+
+  document.getElementById('d-bg').style.background = p.color;
+  document.getElementById('d-mac').style.background = p.color;
+  document.getElementById('d-mac').textContent = p.emoji;
+  document.getElementById('d-num').textContent = `Parfum N°\u00a0${String(p.id).padStart(2,'0')} · ${p.badge}`;
+  document.getElementById('d-name').textContent = p.name;
+  document.getElementById('d-acc').textContent = p.accroche;
+
+  document.getElementById('d-body').innerHTML = `
+    <div class="d-sect">
+      <div class="orig-row">${p.origine.map(o=>`<div class="orig-chip"><b>${o.l}</b>${o.v}</div>`).join('')}</div>
+    </div>
+    <div class="d-sect">
+      <div class="d-lbl">Histoire & Terroir</div>
+      <p class="d-text">${p.histoire}</p>
+    </div>
+    <div class="d-sect">
+      <div class="d-lbl">Profil sensoriel</div>
+      <div class="notes-row">${p.notes.map(n=>`<div class="note-box"><span class="note-e">${n.e}</span><span class="note-l">${n.l}</span><span class="note-v">${n.v}</span></div>`).join('')}</div>
+    </div>
+    <div class="d-sect">
+      <div class="d-lbl">Accords & Suggestions</div>
+      <div class="acc-row">${p.accords.map(a=>`<span class="acc-tag">${a}</span>`).join('')}</div>
+    </div>
+    <div class="d-cta">
+      <button class="btn-primary" ontouchstart="" onclick="window.open('https://macaronaddict.com','_blank')">
+        Commander ce macaron
+      </button>
+      <button class="btn-secondary" ontouchstart="" onclick="closeDetail()">
+        ← Retour aux parfums
+      </button>
+    </div>
+  `;
+
+  const o = document.getElementById('detail-overlay');
+  o.style.display = 'flex';
+  o.scrollTop = 0;
+  requestAnimationFrame(() => requestAnimationFrame(() => o.classList.add('visible')));
+}
+
+function closeDetail() {
+  const o = document.getElementById('detail-overlay');
+  o.classList.remove('visible');
+  setTimeout(() => { o.style.display = 'none'; }, 450);
+  if (document.getElementById('camera-view').classList.contains('active')) simulateScan();
+}
+
+// PWA install prompt
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+
+init();
+</script>
+</body>
+</html>
